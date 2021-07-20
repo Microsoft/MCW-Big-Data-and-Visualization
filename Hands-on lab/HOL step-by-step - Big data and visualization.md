@@ -134,7 +134,7 @@ You have provisioned an Azure Databricks workspace, and now you need to create a
 
    ![The Azure Databricks Azure Active Directory Single Sign On dialog.](media/azure-databricks-aad.png 'Databricks Sign In')
 
-4. Select **Clusters (1)** from the menu, then select **+ Create Cluster (2)** .
+4. Select **Compute (1)** from the menu, then select **+ Create Cluster (2)** .
 
    ![From the left menu, Clusters is selected. The + Create Cluster button is selected.](media/azure-databricks-create-cluster-button.png 'Databricks Clusters')
 
@@ -183,10 +183,10 @@ In this exercise, you will implement a classification experiment. You will load 
 3. Extract the ZIP and verify you have the following files:
 
    - FlightDelaysWithAirportCodes.csv
-   - FlightWeatherWithAirportCodes.csv
+   - FlightWeatherWithAirportCode.csv
    - AirportCodeLocationLookupClean.csv
 
-4. Open your Azure Databricks workspace. Before continuing to the next step, verify that your new cluster is running. Do this by navigating to **Clusters (1)** on the left-hand menu and ensuring that the state of your cluster is **Running (2)**.
+4. Open your Azure Databricks workspace. Before continuing to the next step, verify that your new cluster is running. Do this by navigating to **Compute (1)** on the left-hand menu and ensuring that the state of your cluster is **Running (2)**.
 
    ![The Clusters menu item is selected and the cluster is shown indicating that it is in the Running state.](media/azure-databricks-clusters-running.png 'Clusters')
 
@@ -204,7 +204,7 @@ In this exercise, you will implement a classification experiment. You will load 
 
    ![The Specify Table Attributes form is displayed, flight_delays_with_airport_codes is highlighted in the Table Name field and the First row is header checkbox is checked. The Table Preview displays the Column Names and types along with a sampling of data.](media/flight-delays-attributes.png 'Rename table')
 
-9. Repeat steps 5 through 8 for the FlightWeatherWithAirportCode.csv and AirportCodeLocationsClean.csv files, setting the name for each dataset in a similar fashion:
+9. Repeat steps 5 through 8 for the FlightWeatherWithAirportCode.csv and AirportCodeLocationLookupClean.csv files, setting the name for each dataset in a similar fashion:
 
    - flightweatherwithairportcode_csv renamed to **flight_weather_with_airport_code**
    - airportcodelocationlookupclean_csv renamed to **airport_code_location_lookup_clean**
@@ -213,7 +213,7 @@ In this exercise, you will implement a classification experiment. You will load 
 
 ### Task 2: Install Azure ML library on the cluster
 
-1. Select **Clusters (1)** on the left-hand menu, then select your lab cluster **(2)** to open it.
+1. Select **Compute (1)** on the left-hand menu, then select your lab cluster **(2)** to open it.
 
    ![From the left menu, the Clusters item is selected, and the lab cluster is highlighted.](media/azure-databricks-cluster.png 'Lab cluster')
 
@@ -323,9 +323,9 @@ In this exercise, you will create a baseline environment for Azure Data Factory 
 
    ![Azure Portal Resource Listing page is shown. Azure Data Factory resource is highlighted.](media/select-azure-datafactory.png 'Azure Data Factory')
 
-4. On the Data Factory Overview screen, select **Author & Monitor**.
+4. On the Data Factory Overview screen, select **Open Azure Data Factory Studio**.
 
-   ![In the Azure Data Factory resource screen, Overview is selected from the left menu. The Author & Monitor tile is selected.](media/adf-author-monitor.png 'Author & Monitor')
+   ![In the Azure Data Factory resource screen, Overview is selected from the left menu. The Open Azure Data Factory Studio tile is selected.](media/adf-author-monitor.png 'Open Azure Data Factory Studio')
 
 5. A new page will open in another tab or new window. Within the Azure Data Factory site, select **Manage** on the menu.
 
@@ -367,7 +367,7 @@ In this exercise, you will create a baseline environment for Azure Data Factory 
 
 15. Depending on your version of the Integration Runtime, you will be asked to specify a backup file. Select **Skip** and **OK**.
 
-   ![The Integration Runtime Configuration Manager requests a backup credentials. Configuring backup settings is unncessary for this lab.](./media/skip_ir_backup.png 'Skipping Integration Runtime backup settings')
+   ![The Integration Runtime Configuration Manager requests a backup credentials. Configuring backup settings is unncessary for this lab.](media/skip_ir_backup.png 'Skipping Integration Runtime backup settings')
 
 16. You will then get a screen with a confirmation message. Select the **Launch Configuration Manager** button to view the connection details.
 
@@ -391,27 +391,21 @@ In this exercise, you will create an Azure Data Factory pipeline to copy data (.
 
 ### Task 1: Create copy pipeline using the Copy Data Wizard
 
-1. Within the Azure Data Factory overview page, select **Copy Data**.
+1. Within the Azure Data Factory overview page, select **Ingest**.
 
-   ![The Copy Data item is from the Azure Data Factory overview page.](media/adf-copy-data-link.png 'Copy Data')
+   ![The Ingest item is from the Azure Data Factory overview page.](media/adf-copy-data-link.png 'Ingest')
 
-2. In the Copy Data properties, enter the following:
-
-   - **Task name (1)**: `CopyOnPrem2AzurePipeline`
-
-   - **Task description**: (Optional) `This pipeline copies time-sliced CSV files from on-premises C:\\Data to Azure Blob Storage as a continuous job.`
-
-   - **Task cadence or Task schedule (2)**: Select **Schedule**
-
-   - **Start date (UTC)**: Enter **01/01/2021 12:00 AM**
-
-   - **Recurrence**: Every `1` **(4)**, and select **Month(s)** **(5)**
-
-   - Under the **Advanced recurrence options**, make sure you have a value of `0` in the textboxes for **Hours (UTC)** and **Minutes (UTC)** **(6)**, otherwise it will fail later during Publishing.
+2. Enter the **Properties** page
+  
+   - Select **Built-in copy task** (1)
+   - Select **Schedule** below **Task cadence or task schedule** (2)
+   - Set the **Start Date (UTC)** to **01/01/2021 12:00 AM** (3) 
+   - Set the **Recurrence** to **Every 1 month** (4)
+   - Below **Advanced recurrence options**, set **Hours** and **Minutes** to 0 (5)
 
    ![The Properties form for the copy data task is shown populated with the values outlined above.](media/adf-copy-data-properties.png 'Properties dialog box')
 
-3. Select **Next (7)**.
+3. Select **Next (6)**.
 
 4. On the Source data store screen, select **+ Create new connection**.
 
@@ -441,9 +435,9 @@ In this exercise, you will create an Azure Data Factory pipeline to copy data (.
 
    ![On the Source data store page, OnPremServer is selected, and the Next button is highlighted.](media/adf-copy-data-source-next.png 'Select Next')
 
-9. On the **Choose the input file or folder** screen, select **Browse (1)**, then select the **FlightsAndWeather (2)** folder. Next, select **Load all files** under file loading behavior, check **Recursively**, then select **Next (3)**.
+9. On the **Source data store** screen, select **Browse (1)**, then select the **FlightsAndWeather (2)** folder. Next, select **Load all files** under file loading behavior, check **Recursively**, then select **Next**.
 
-   ![In the Choose the input file or folder screen, the Browse button, and Next button are highlighted. The File or Folder is set to FlightsAndWeather, the File loading behavior is set to Load all files, and the checkbox for Recursively is checked.](media/adf-copy-data-source-choose-input.png 'Choose the input file or folder page')
+   ![In the Source data store screen, the Browse button is highlighted. The File or Folder is set to FlightsAndWeather, the File loading behavior is set to Load all files, and the checkbox for Recursively is checked.](media/adf-copy-data-source-choose-input.png 'Choose the input file or folder page')
 
 10. On the File format settings page, select the following options:
 
@@ -451,9 +445,7 @@ In this exercise, you will create an Azure Data Factory pipeline to copy data (.
 
     - **Column delimiter**: **Comma (,)**
 
-    - **Row delimiter**: **Auto detect (\r, \n, or \r\n)**
-
-    - **Skip line count**: `0`
+    - **Row delimiter**: **Default (\r, \n, or \r\n)**
 
     - **First row as header (2)**: **Checked**
 
@@ -461,7 +453,7 @@ In this exercise, you will create an Azure Data Factory pipeline to copy data (.
 
 11. Select **Next (3)**.
 
-12. On the Destination data store screen, select **+ Create new connection**.
+12. On the Destination data store screen, select **+ New connection**.
 
 13. Select **Azure Blob Storage (1)** within the New Linked Service blade, then select **Continue (2)**.
 
@@ -481,9 +473,7 @@ In this exercise, you will create an Azure Data Factory pipeline to copy data (.
 
     ![On the New linked service (Azure Blob storage) page, the fields are set to the previously defined values.](media/adf-copy-data-blob-storage-linked.png 'New Linked Service Blob Storage')
 
-15. On the Destination data store page, select **Next**.
-
-16. From the **Choose the output file or folder** tab, enter the following:
+15. On the Destination data store page, configure the Blob Storage output path.
 
     - **Folder path (1)**: `sparkcontainer/FlightsAndWeather/{Year}/{Month}/`
 
@@ -497,25 +487,25 @@ In this exercise, you will create an Azure Data Factory pipeline to copy data (.
 
     - Select **Next (5)**.
 
-      ![On the Choose the output file or folder form, fields are set to the previously defined values.](media/adf-copy-data-output-file-folder.png 'Choose the output file or folder page')
+      ![On the Destination data store form, fields are set to the previously defined values.](media/adf-copy-data-output-file-folder.png 'Destination data store page')
 
-17. On the File format settings screen, select the **Text format (1)** file format, and check the **Add header to file (2)** checkbox, then select **Next (3)**. If present, leave **Max rows per file** and **File name prefix** at their defaults.
+16. On the File format settings screen, select the **Text format (1)** file format, and check the **Add header to file (2)** checkbox, then select **Next (3)**. If present, leave **Max rows per file** and **File name prefix** at their defaults.
 
     ![On the File format settings page, the File Format is set to Text format, and the check box for Add header to file is selected. The Next button is selected.](media/adf-copy-data-file-format-settings.png 'File format settings page')
 
-18. On the **Settings** screen, select **Skip incompatible rows (1)** under Fault tolerance, and uncheck **Enable logging (2)**. If present, keep **Data consistency verification** unchecked. Expand Advanced Settings and set Degree of copy parallelism to `10` **(3)**, then select **Next (4)**.
-
+17. On the **Settings** screen, select **Skip incompatible rows (1)** under Fault tolerance, and uncheck **Enable logging (2)**. If present, keep **Data consistency verification** unchecked. Expand Advanced Settings and set Degree of copy parallelism to `10` **(3)**, then select **Next (4)**.
+   
     ![In the Fault tolerance drop-down Skip incompatible rows is selected, and the Degree of copy parallelism is set to 10. The Next button is selected.](media/adf-copy-data-settings.png 'Settings page')
 
-19. Review settings on the **Summary** tab, but **DO NOT choose Next**.
+18. Review settings on the **Summary** tab, but **DO NOT choose Next**.
 
     ![The Summary page is displayed.](media/adf-copy-data-summary.png 'Summary page')
 
-20. Scroll down on the summary page until you see the **Copy Settings (1)** section. Select **Edit (2)** next to **Copy Settings**.
+19. Scroll down on the summary page until you see the **Copy Settings (1)** section. Select **Edit (2)** next to **Copy Settings**.
 
     ![The Edit link is selected next to the Copy settings header.](media/adf-copy-data-review-page.png 'Summary page')
 
-21. Change the following Copy setting:
+20. Change the following Copy setting:
 
     - **Retry (1)**: `3`
 
@@ -523,9 +513,9 @@ In this exercise, you will create an Azure Data Factory pipeline to copy data (.
 
       ![In the Copy settings form, the Retry textbox is set to 3, and the Save link is highlighted.](media/adf-copy-data-copy-settings.png 'Copy settings')
 
-22. After saving the Copy settings, select **Next (3)** on the Summary tab.
+21. After saving the Copy settings, select **Next (3)** on the Summary tab.
 
-23. On the **Deployment** screen, you will see a message that the deployment is in progress, and after a minute or two, the deployment is completed. Select **Edit Pipeline** to close out of the wizard and navigate to the pipeline editing blade.
+22. On the **Deployment** screen, you will see a message that the deployment is in progress, and after a minute or two, the deployment is completed. Select **Edit Pipeline** to close out of the wizard and navigate to the pipeline editing blade.
 
     ![The Deployment screen indicates the deployment is complete.](media/adf-copy-data-deployment.png 'Deployment page')
 
@@ -540,6 +530,10 @@ In this exercise, you will extend the Data Factory to operationalize data scorin
 1. Return to, or reopen the Author & Monitor page for your Azure Data Factory in a web browser, navigate to the Author view **(1)**, and select the `CopyOnPrem2AzurePipeline` pipeline **(2)**.
 
    ![Under Factory Resources, the CopyOnPrem2AzurePipeline pipeline is selected.](media/adf-ml-select-pipeline.png 'Select the ADF pipeline')
+
+   >**Note**: You may need to rename your pipeline if you followed the steps above. Simply press the three dots next to the pipeline and select **Rename**. Use `CopyOnPrem2AzurePipeline` as the new pipeline name.
+
+   ![Renaming the new Azure Data Factory Pipeline.](media/adf-pipeline-rename.png "Pipeline rename in ADF")
 
 2. Once there, expand Databricks under Activities.
 
